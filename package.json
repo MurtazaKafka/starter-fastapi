@@ -1,0 +1,4 @@
+"script": {
+  "starter": "uvicorn main:app",
+  "dev": "uvicorn main:app"
+}
