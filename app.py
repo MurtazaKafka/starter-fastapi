@@ -1,35 +1,20 @@
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
-
-from pydantic import BaseModel
+from scrapista import *
 
 app = FastAPI()
 
+azs = AmazonScraper()
 
-class Item(BaseModel):
-    item_id: int
-
-
+# welcome
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"Status": "Welcome"}
 
+# amazon
+@app.get("/amazon")
+async def amazon(url):
+    return azs.scrape_item(url)
 
-@app.get('/favicon.ico', include_in_schema=False)
-async def favicon():
-    return FileResponse('favicon.ico')
-
-
-@app.get("/item/{item_id}")
-async def read_item(item_id: int):
-    return {"item_id": item_id}
-
-
-@app.get("/items/")
-async def list_items():
-    return [{"item_id": 1, "name": "Foo"}, {"item_id": 2, "name": "Bar"}]
-
-
-@app.post("/items/")
-async def create_item(item: Item):
-    return item
+@app.get("/amazon/{keyword}")
+async def amazon_keyword(keyword):
+    return azs.scrape_keyword(keyword)
